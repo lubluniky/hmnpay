@@ -1,0 +1,58 @@
+# hmnpay, self-hosted. Copy .env.example to .env, adjust, then:
+#
+#   docker compose up -d --build
+#   open http://localhost:8080  (first-run setup; the web interface is in the image)
+#
+# Recover the operator password:
+#   docker compose exec hmnpay hmnpay reset-password
+#
+# On first start the server prints a SETUP TOKEN (docker compose logs
+# hmnpay); the setup wizard asks for it.
+#
+# Exposure. The port is published on 127.0.0.1 only. Ports published by
+# Docker bypass host firewalls such as ufw (Docker writes its own iptables
+# rules), so "0.0.0.0:8080:8080" would be reachable from the internet even
+# with ufw denying it. Two supported patterns:
+#   1. Reverse proxy on the host (Caddy, nginx) terminating TLS and
+#      forwarding to 127.0.0.1:8080; set HMNPAY_PUBLIC_URL to the https URL
+#      and HMNPAY_TRUSTED_PROXIES to the proxy's address (127.0.0.1, or the
+#      Docker bridge gateway, e.g. 172.17.0.1, as seen from the container).
+#   2. Deliberately public: set HMNPAY_BIND=0.0.0.0 in .env (only behind
+#      TLS terminated elsewhere, and never before setup is completed).
+services:
+  hmnpay:
+    build:
+      context: .
+      args:
+        VERSION: ${HMNPAY_VERSION:-dev}
+        COMMIT: ${HMNPAY_COMMIT:-unknown}
+    image: hmnpay:${HMNPAY_VERSION:-dev}
+    restart: unless-stopped
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      # Inside the container these are fixed; publish a different host
+      # port below instead of changing HMNPAY_LISTEN.
+      HMNPAY_LISTEN: ":8080"
+      HMNPAY_DATA_DIR: /data
+    ports:
+      - "${HMNPAY_BIND:-127.0.0.1}:${HMNPAY_HOST_PORT:-8080}:8080"
+    volumes:
+      - hmnpay-data:/data
+    # Hardening: the root filesystem is read-only (the binary writes only
+    # to /data; SQLite may spill temporary files to /tmp), no Linux
+    # capabilities, no privilege escalation.
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - "no-new-privileges:true"
+    # Graceful shutdown drains in-flight webhooks (up to ~15 s) and the
+    # chain watcher; give it more than HMNPAY_SHUTDOWN_TIMEOUT.
+    stop_grace_period: 45s
+
+volumes:
+  hmnpay-data:

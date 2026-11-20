@@ -1,0 +1,67 @@
+# dependencies
+node_modules/
+.pnp
+.pnp.*
+
+# next.js
+.next/
+out/
+build/
+next-env.d.ts
+*.tsbuildinfo
+
+# env
+.env*
+!.env.example
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# testing / tooling output
+coverage/
+.shots/
+playwright-report/
+test-results/
+
+# misc
+.DS_Store
+*.pem
+.vercel
+.turbo
+
+# go
+/bin/
+/dist/
+*.test
+*.out
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+
+# hmnpay runtime data (default HMNPAY_DATA_DIR)
+/data/
+
+# locally built server binary
+/hmnpay
+
+# the built web interface, embedded by internal/webui (make ui)
+/internal/webui/dist/*
+!/internal/webui/dist/.placeholder
+
+# end-to-end test output and the cached token bytecode
+/apps/web/e2e/.results/
+/apps/web/e2e/.cache/
+
+# The build scripts/third-party-notices.mjs makes to read the bundle's contents.
+apps/web/.next-notices/
+
+# Notes that tools write for coding agents ("next dev" re-creates
+# apps/web/AGENTS.md whenever it runs). They are not part of the project.
+AGENTS.md
+CLAUDE.md

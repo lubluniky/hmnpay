@@ -1,0 +1,31 @@
+# What the image build needs: the Go sources, go.mod/go.sum, and the web
+# interface's sources (apps/web) with the workspace files. Nothing built
+# locally goes in: the image builds its own interface and its own binary.
+.git
+.github
+.shots
+.env
+.env.*
+!.env.example
+**/node_modules
+apps/web/.next
+apps/web/out
+apps/web/e2e
+apps/web/next-env.d.ts
+apps/web/tsconfig.tsbuildinfo
+internal/webui/dist/*
+!internal/webui/dist/.placeholder
+scripts
+data
+bin
+dist
+hmnpay
+*.db
+*.db-wal
+*.db-shm
+*.test
+*.out
+**/*_test.go
+Dockerfile
+docker-compose.yml
+Makefile

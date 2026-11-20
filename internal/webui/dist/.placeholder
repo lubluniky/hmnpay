@@ -1,0 +1,9 @@
+This directory receives the built web interface (the static export of
+apps/web) and is embedded into the hmnpay binary by internal/webui.
+
+It is empty in the repository on purpose: build the interface with
+
+    make ui            (or: scripts/build-ui.sh)
+
+and then build the binary. A binary built without it works, serves the API,
+and shows a page saying that the interface was not built in.

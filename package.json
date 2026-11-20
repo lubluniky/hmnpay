@@ -1,0 +1,26 @@
+{
+  "name": "hmnpay",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Open-source, self-hosted crypto payment gateway",
+  "license": "GPL-3.0-or-later",
+  "type": "module",
+  "packageManager": "pnpm@12.18.0+sha512.9d7882d5dc82147ecfc4e062aa34834e0ad0296710a1837a1115ae012127d36b7109e321ac1598a1dd0a65597681b1e99917e12ed0d749eae91187943363beb3",
+  "engines": {
+    "node": "22.x",
+    "pnpm": "12.x"
+  },
+  "scripts": {
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm --filter web build",
+    "lint": "pnpm --filter web lint",
+    "typecheck": "pnpm --filter web typecheck",
+    "shots": "node scripts/shots.mjs",
+    "test": "pnpm --filter web test",
+    "e2e": "pnpm --filter web e2e",
+    "build:ui": "./scripts/build-ui.sh"
+  },
+  "devDependencies": {
+    "playwright-core": "1.65.1"
+  }
+}
